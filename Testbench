@@ -1,0 +1,47 @@
+//MAC UNIT TESTBENCH:
+
+module tb;
+
+	// Inputs
+  logic [31:0] data_a;
+  logic [31:0] data_b;
+  logic clk, clear;
+	// Outputs
+  logic [63:0] acc;
+  logic [7:0] temp_a, temp_b;
+
+	// Instantiate the Unit Under Test (UUT)
+  mac uut (clk, data_a, data_b, acc,clear);
+
+  initial begin
+    clk = 0;
+    forever #5 clk = ~ clk;
+  end
+  
+  assign data_a = {'0, temp_a};
+  assign data_b = {'0, temp_b};
+  
+	initial begin
+		// Initialize Inputs
+      
+      $monitor("%d	%b	%0d	%0d	%0d",$time, clear, data_a, data_b, acc);
+      	temp_a = '0;
+      	temp_b = '0;
+         clear = 1;
+        #10 clear = 0;
+    end
+  initial begin
+    repeat(20) begin
+        #10;
+        temp_a =$random;
+        temp_b = $random;
+      end
+	end
+ 
+  initial begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+      #200 $finish ;
+  end
+      
+endmodule
